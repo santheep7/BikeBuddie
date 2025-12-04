@@ -302,10 +302,28 @@ const HomePage = () => {
       <motion.div className="header-text">
         <Slider {...sliderSettings}>
           <div>
-            <img src={slider1} alt="slider 1" style={{ width: '100%', height: '80vh', objectFit: 'cover' }} />
+            <img 
+              src={slider1} 
+              alt="slider 1" 
+              style={{ 
+                width: '100%', 
+                height: isMobile ? '40vh' : '80vh', 
+                objectFit: 'cover',
+                maxHeight: '600px'
+              }} 
+            />
           </div>
           <div>
-            <img src="slider2.jpg" alt="slider 2" style={{ width: '100%', height: '80vh', objectFit: 'fill' }} />
+            <img 
+              src="slider2.jpg" 
+              alt="slider 2" 
+              style={{ 
+                width: '100%', 
+                height: isMobile ? '40vh' : '80vh', 
+                objectFit: 'cover',
+                maxHeight: '600px'
+              }} 
+            />
           </div>
         </Slider>
       </motion.div>
