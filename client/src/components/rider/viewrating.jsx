@@ -12,7 +12,7 @@ export default function ViewRating() {
 
   useEffect(() => {
     // Fetch reviews from the server
-    axios.get(`${API_BASE_URL}/rider/viewrating`, { headers: { id: userid } })
+    axios.get(`${API_BASE_URL}/api/rider/viewrating`, { headers: { id: userid } })
       .then((res) => {
         console.log(res.data);
         setReviews(res.data); // Store the fetched reviews

@@ -13,7 +13,7 @@ export default function RideHistory() {
   useEffect(() => {
     const userid = localStorage.getItem("id");
     axios
-      .get(`${API_BASE_URL}/user/viewmybookings`, { headers: { _id: userid } })
+      .get(`${API_BASE_URL}/api/user/viewmybookings`, { headers: { _id: userid } })
       .then((res) => {
         console.log(res.data);
         setBooking(res.data);

@@ -90,7 +90,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
         if (!valid) return; // Stop submission if validation fails
 
         const payload = { email, password, role, fullname };
-        const url = `${API_BASE_URL}/user/register`;
+        const url = `${API_BASE_URL}/api/user/register`;
 
         try {
             const res = await axios.post(url, payload);
@@ -124,12 +124,17 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
         }
 
         try {
-            const response = await axios.post(`${API_BASE_URL}/user/verify-otp`, { email, otp });
+            const response = await axios.post(`${API_BASE_URL}/api/user/verify-otp`, { email, otp });
+            // Send a request to the API to verify the OTP
             toast.success('OTP send your email!')
+
+            // If the OTP is verified, redirect to the login page
+            toast.success('OTP verified successfully!');
             // alert(response.data.message);
             navigate('/login');
         } catch (error) {
             toast.error('OTP verification failed!');
+            // If the OTP verification fails, show an error message
             // alert(error.response?.data?.message || 'OTP verification failed!');
         }
     };
@@ -137,7 +142,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     const handleResendOtp = async () => {
         const email = localStorage.getItem('email');
         try {
-            const response = await axios.post(`${API_BASE_URL}/user/resend-otp`, { email });
+            const response = await axios.post(`${API_BASE_URL}/api/user/resend-otp`, { email });
             alert(response.data.message);
             setRemainingTime(60); // Reset the timer to 60 seconds
             setIsOtpSent(true); // OTP sent again

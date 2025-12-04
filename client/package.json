@@ -41,6 +41,7 @@
     "sentiment": "^5.0.2",
     "slick-carousel": "^1.8.1",
     "tailwindcss": "^4.1.17",
+    "three": "^0.181.2",
     "toast": "^0.5.4",
     "toastify": "^2.0.1"
   },

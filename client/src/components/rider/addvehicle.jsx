@@ -31,7 +31,7 @@ export default function Addvehicle() {
     vehicleImage.forEach((f) => formData.append("vehicleImage", f));
 
     axios
-      .post(`${API_BASE_URL}/rider/addvehicle`, formData, {
+      .post(`${API_BASE_URL}/api/rider/addvehicle`, formData, {
         headers: { id: userId, "Content-Type": "multipart/form-data" },
       })
       .then((res) => {

@@ -57,7 +57,7 @@ const AdminLoginPage = () => {
         }
 
         const payload = { email, password };
-        const url = `${API_BASE_URL}/user/login`;
+        const url = `${API_BASE_URL}/api/user/login`;
 
         try {
             const res = await axios.post(url, payload);

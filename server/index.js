@@ -6,6 +6,8 @@ const dbConnect = require('./models/dbconnect');
 require('dotenv').config();
 
 app.use(cors());
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -21,12 +23,12 @@ const adminRouter = require('./router/adminRouter');
 
 // ✅ Use Routers
 app.use('/api/payment', paymentRouter);
-app.use('/user', userRouter);
-app.use('/rider', riderRouter);
-app.use('/admin', adminRouter);
+app.use('/api/user', userRouter);
+app.use('/api/rider', riderRouter);
+app.use('/api/admin', adminRouter);
 
 // ✅ Server Listening
 const PORT = process.env.PORT || 9000;
 app.listen(PORT, () => {
-    console.log("Server is running on port:9000 sucessfully");
+    console.log(`Server is running on port:${PORT} sucessfully`);
 });

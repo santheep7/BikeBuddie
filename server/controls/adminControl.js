@@ -17,10 +17,21 @@ const viewUsers=async(req,res)=>{
 const viewRiders = async (req, res) => {
     try {
         console.log("view")
-        const riders = await vehicleModel.find({}).populate("userId"); 
-        res.status(200).json(riders);
-        console.log(riders)
-        res.end()
+        const vehicles = await vehicleModel.find({}).populate("userId");
+        
+        // Group vehicles by userId to avoid showing duplicate riders
+        const uniqueRiders = [];
+        const seenUserIds = new Set();
+        
+        vehicles.forEach(vehicle => {
+            if (vehicle.userId && !seenUserIds.has(vehicle.userId._id.toString())) {
+                seenUserIds.add(vehicle.userId._id.toString());
+                uniqueRiders.push(vehicle);
+            }
+        });
+        
+        res.status(200).json(uniqueRiders);
+        console.log(uniqueRiders)
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -53,7 +64,17 @@ const deleteUser=async(req,res)=>{
 const countDetails = async (req, res) => {
     try {
         const userCount = await userModel.countDocuments({ role: "user" });
-        const riderCount = await userModel.countDocuments({ role: "rider" });
+        
+        // Count only unique riders who have registered vehicles
+        const vehicles = await vehicleModel.find({}).populate("userId");
+        const uniqueRiderIds = new Set();
+        vehicles.forEach(vehicle => {
+            if (vehicle.userId) {
+                uniqueRiderIds.add(vehicle.userId._id.toString());
+            }
+        });
+        const riderCount = uniqueRiderIds.size;
+        
         const bikeCount = await vehicleModel.countDocuments();
         const bookCount= await riderModel.countDocuments();
         res.json({ users: userCount, riders: riderCount, bikes: bikeCount ,bookings : bookCount});

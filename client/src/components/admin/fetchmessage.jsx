@@ -9,7 +9,7 @@ export default function FetchMessage() {
   useEffect(() => {
     // Fetch the messages from the API
     axios
-      .get(`${API_BASE_URL}/admin/viewmessage`)
+      .get(`${API_BASE_URL}/api/admin/viewmessage`)
       .then(response => {
         console.log(response.data);
         setMessages(response.data); // Set the fetched messages in state

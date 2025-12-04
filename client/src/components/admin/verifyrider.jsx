@@ -10,7 +10,7 @@ export default function VerifyRider() {
 
   useEffect(() => {
     axios
-      .get(`${API_BASE_URL}/admin/viewriders`)
+      .get(`${API_BASE_URL}/api/admin/viewriders`)
       .then((res) => {
         const filteredRiders = res.data.filter((r) => r?.userId);
         setRiders(filteredRiders);
@@ -30,7 +30,7 @@ export default function VerifyRider() {
 
   const verifyUser = (id) => {
     axios
-      .put(`${API_BASE_URL}/admin/verifyrider/${id}`)
+      .put(`${API_BASE_URL}/api/admin/verifyrider/${id}`)
       .then(() => {
         toast.success("Rider verified successfully!");
         setRiders((prev) =>
@@ -44,7 +44,7 @@ export default function VerifyRider() {
 
   const deleteUser = (id) => {
     axios
-      .delete(`${API_BASE_URL}/admin/deleteuser/${id}`)
+      .delete(`${API_BASE_URL}/api/admin/deleteuser/${id}`)
       .then(() => {
         toast.success("User deleted successfully!");
         setRiders((prev) => prev.filter((r) => r.userId?._id !== id));
@@ -109,12 +109,19 @@ export default function VerifyRider() {
                         </button>
                       ) : (
                         <button
-                          onClick={() => deleteUser(rider?.userId?._id)}
-                          className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                          disabled
+                          className="px-3 py-1 bg-gray-400 text-white rounded cursor-not-allowed"
                         >
-                          Delete
+                          ✓ Verified
                         </button>
                       )}
+                      
+                      <button
+                        onClick={() => deleteUser(rider?.userId?._id)}
+                        className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))

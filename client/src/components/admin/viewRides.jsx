@@ -31,7 +31,7 @@ export default function ViewRides() {
 
   useEffect(() => {
     axios
-      .get(`${API_BASE_URL}/admin/viewrides`)
+      .get(`${API_BASE_URL}/api/admin/viewrides`)
       .then((res) => {
         calculateStats(res.data);
       })

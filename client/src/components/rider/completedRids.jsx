@@ -9,7 +9,7 @@ export default function CompletedRides() {
   useEffect(() => {
     const userid = localStorage.getItem("id");
     axios
-      .get(`${API_BASE_URL}/rider/viewrides`, { headers: { _id: userid } })
+      .get(`${API_BASE_URL}/api/rider/viewrides`, { headers: { _id: userid } })
       .then((res) => {
         console.log(res.data);
         setBooking(res.data);

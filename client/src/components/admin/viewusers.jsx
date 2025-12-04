@@ -8,7 +8,7 @@ export default function ViewUsers() {
 
 
     useEffect(() => {
-        AXIOS.get(`${API_BASE_URL}/admin/viewusers`)
+        AXIOS.get(`${API_BASE_URL}/api/admin/viewusers`)
             .then(res => {
                 setUsers(res.data);
             })
@@ -16,7 +16,7 @@ export default function ViewUsers() {
     }, []);
 
     const deleteUser = (id) => {    
-        AXIOS.delete(`${API_BASE_URL}/admin/deleteuser/${id}`)
+        AXIOS.delete(`${API_BASE_URL}/api/admin/deleteuser/${id}`)
             .then(res => {
                 alert(res.data);
                 setUsers(prevUsers => prevUsers.filter(u => u._id !== id));

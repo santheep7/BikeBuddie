@@ -5,9 +5,14 @@ import { useMediaQuery } from '@mui/material';
 import { motion } from 'framer-motion';
 import Slider from 'react-slick';
 import { gsap } from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import axios from 'axios';
 import ReactStars from 'react-stars';  // Import react-stars
 import slider1 from '../images/slide1.webp';
+import ThreeBikeScene from './ThreeBikeScene';
+
+// Register GSAP plugin
+gsap.registerPlugin(ScrollToPlugin);
 
 const navbarStyles = {
   backgroundColor: '#333',
@@ -58,6 +63,7 @@ const HomePage = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width:600px)');
   const [reviews, setReviews] = useState([]);
+  const [show3D, setShow3D] = useState(true);
   
   // Contact form state
   const [contact, setContact] = useState({
@@ -74,6 +80,63 @@ const HomePage = () => {
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  // Smooth scroll to About section with GSAP animation
+  const scrollToAbout = (e) => {
+    e.preventDefault();
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+      gsap.to(window, {
+        duration: 1.5,
+        scrollTo: { y: aboutSection, offsetY: 70 },
+        ease: "power3.inOut"
+      });
+      
+      // Animate about section on scroll
+      gsap.fromTo(".about-text", 
+        { opacity: 0, x: -50 }, 
+        { opacity: 1, x: 0, duration: 1, stagger: 0.2, ease: "power2.out" }
+      );
+    }
+  };
+
+  // Smooth scroll to Testimonials section with GSAP animation
+  const scrollToTestimonials = (e) => {
+    e.preventDefault();
+    const testimonialsSection = document.getElementById('testimonials');
+    if (testimonialsSection) {
+      gsap.to(window, {
+        duration: 1.5,
+        scrollTo: { y: testimonialsSection, offsetY: 70 },
+        ease: "power3.inOut"
+      });
+      
+      // Animate testimonial boxes on scroll
+      gsap.fromTo(".testimonial-box", 
+        { opacity: 0, y: 50, scale: 0.8 }, 
+        { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.15, ease: "back.out(1.5)" }
+      );
+    }
+  };
+
+  // Smooth scroll to contact section with GSAP animation
+  const scrollToContact = (e) => {
+    e.preventDefault();
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      gsap.to(window, {
+        duration: 1.5,
+        scrollTo: { y: contactSection, offsetY: 70 },
+        ease: "power3.inOut"
+      });
+      
+      // Animate contact form on scroll
+      gsap.fromTo("#contact", 
+        { opacity: 0, scale: 0.9 }, 
+        { opacity: 1, scale: 1, duration: 1, ease: "back.out(1.7)" }
+      );
+    }
   };
 
   // Handle form input changes
@@ -130,7 +193,7 @@ const HomePage = () => {
     }
 
     // Send contact data to backend
-    axios.post(`${API_BASE_URL}/user/contact`, contact)
+    axios.post(`${API_BASE_URL}/api/user/contact`, contact)
       .then((res) => {
         alert(res.data);
       })
@@ -141,7 +204,7 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/admin/viewreviews`)
+    axios.get(`${API_BASE_URL}/api/admin/viewreviews`)
       .then((res) => {
         const reviewsData = res.data;
         setReviews(reviewsData);
@@ -178,7 +241,29 @@ const HomePage = () => {
   };
 
   return (
-    <div>
+    <div style={{ position: 'relative', overflow: 'hidden' }}>
+      {show3D && <ThreeBikeScene />}
+      
+      {/* 3D Toggle Button */}
+      <Button
+        onClick={() => setShow3D(!show3D)}
+        sx={{
+          position: 'fixed',
+          bottom: 20,
+          right: 20,
+          zIndex: 1000,
+          backgroundColor: '#ff7043',
+          color: 'white',
+          '&:hover': { backgroundColor: '#f4511e' },
+          borderRadius: '50%',
+          minWidth: '56px',
+          height: '56px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+        }}
+      >
+        {show3D ? '3D OFF' : '3D ON'}
+      </Button>
+
       <AppBar position="sticky" sx={navbarStyles}>
         <Toolbar>
           <Typography variant="h6">Bike Buddie</Typography>
@@ -188,9 +273,9 @@ const HomePage = () => {
             </IconButton>
           ) : (
             <Box ml="auto">
-              <Button sx={buttonHoverStyles} href="#about">About</Button>
-              <Button sx={buttonHoverStyles} href="#testimonials">Testimonials</Button>
-              <Button sx={buttonHoverStyles} href="#contact">Contact</Button>
+              <Button sx={buttonHoverStyles} onClick={scrollToAbout}>About</Button>
+              <Button sx={buttonHoverStyles} onClick={scrollToTestimonials}>Testimonials</Button>
+              <Button sx={buttonHoverStyles} onClick={scrollToContact}>Contact</Button>
               <Button sx={buttonHoverStyles} href="login">Login</Button>
             </Box>
           )}
@@ -199,13 +284,13 @@ const HomePage = () => {
 
       <Drawer anchor="right" open={mobileOpen} onClose={handleDrawerToggle}>
         <List>
-          <ListItem button component="a" href="#about" onClick={handleDrawerToggle}>
+          <ListItem button onClick={(e) => { scrollToAbout(e); handleDrawerToggle(); }}>
             <ListItemText primary="About" />
           </ListItem>
-          <ListItem button component="a" href="#testimonials" onClick={handleDrawerToggle}>
+          <ListItem button onClick={(e) => { scrollToTestimonials(e); handleDrawerToggle(); }}>
             <ListItemText primary="Testimonials" />
           </ListItem>
-          <ListItem button component="a" href="#contact" onClick={handleDrawerToggle}>
+          <ListItem button onClick={(e) => { scrollToContact(e); handleDrawerToggle(); }}>
             <ListItemText primary="Contact" />
           </ListItem>
           <ListItem button component="a" href="/Loginpage" onClick={handleDrawerToggle}>

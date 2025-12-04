@@ -3,6 +3,8 @@ import { FaBicycle } from "react-icons/fa";
 import UserNav from "./usernav";
 import axios from "axios";
 import L from "leaflet";
+import { toast, ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BookRide = () => {
   const [startAddress, setStartAddress] = useState("");
@@ -22,7 +24,7 @@ const BookRide = () => {
   useEffect(() => {
     const fetchRiders = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/user/viewbikes`);
+        const response = await fetch(`${API_BASE_URL}/api/user/viewbikes`);
         const data = await response.json();
         const verified = data.filter(
           (item) => item.userId && item.userId.verifieddriver === true
@@ -113,7 +115,10 @@ const BookRide = () => {
 
   // 🚗 Booking Handler
   const handleBooking = async () => {
-    if (!selectedRider) return alert("Select rider");
+    if (!selectedRider) {
+      toast.error("Please select a rider!");
+      return;
+    }
 
     const bookingDetails = {
       vehicleId: selectedRider._id,
@@ -125,14 +130,107 @@ const BookRide = () => {
       paymentStatus: paymentMethod,
     };
 
-    axios
-      .post(`${API_BASE_URL}/user/bookride`, bookingDetails)
-      .then((res) => alert(res.data))
-      .catch((err) => console.log(err));
+    // If online payment is selected, trigger Razorpay
+    if (paymentMethod === "paid") {
+      try {
+        // Create Razorpay order
+        const orderResponse = await axios.post(`${API_BASE_URL}/api/payment/create-order`, {
+          amount: totalPrice,
+          currency: "INR",
+          receipt: `receipt_${Date.now()}`,
+        });
+
+        const { id: order_id, amount: orderAmount, currency } = orderResponse.data;
+
+        // Razorpay options
+        const options = {
+          key: "rzp_test_RnTdPMTgqo87pK",
+          amount: orderAmount,
+          currency: currency,
+          name: "Bike Buddie",
+          description: "Ride Booking Payment",
+          order_id: order_id,
+          handler: async function (response) {
+            try {
+              // Verify payment
+              const verifyRes = await axios.post(`${API_BASE_URL}/api/payment/verify-payment`, {
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                bookingDetails: bookingDetails,
+              });
+
+              toast.success("Payment successful! Booking confirmed.", {
+                position: "top-center",
+                autoClose: 3000,
+              });
+              // Reload after toast
+              setTimeout(() => window.location.reload(), 3000);
+            } catch (error) {
+              console.error("Payment verification failed:", error);
+              console.error("Error response:", error.response?.data);
+              toast.error(`Payment verification failed! ${error.response?.data?.error || error.message}`, {
+                position: "top-center",
+                autoClose: 5000,
+              });
+            }
+          },
+          prefill: {
+            name: "Customer Name",
+            email: "customer@example.com",
+            contact: "9999999999",
+          },
+          theme: {
+            color: "#ff7043",
+          },
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+      } catch (error) {
+        console.error("Error creating order:", error);
+        console.error("Error details:", error.response?.data);
+        toast.error(`Failed to initiate payment! ${error.response?.data?.error || error.message}`, {
+          position: "top-center",
+          autoClose: 5000,
+        });
+      }
+    } else {
+      // Pay later - direct booking
+      axios
+        .post(`${API_BASE_URL}/api/user/bookride`, bookingDetails)
+        .then((res) => {
+          toast.success(res.data || "Booking confirmed!", {
+            position: "top-center",
+            autoClose: 3000,
+          });
+          setTimeout(() => window.location.reload(), 3000);
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Failed to book ride!", {
+            position: "top-center",
+            autoClose: 5000,
+          });
+        });
+    }
   };
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
       <UserNav />
 
       <div className="min-h-screen bg-gray-100 flex justify-center py-12 px-4">

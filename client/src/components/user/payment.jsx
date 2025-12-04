@@ -17,7 +17,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
       const { id: order_id, amount: orderAmount, currency } = orderResponse.data;
 
       const options = {
-        key: "rzp_test_AQz9oVZHhqMI1R",  // Replace with your Razorpay Test Key
+        key: "rzp_test_RnTdPMTgqo87pK",  // Razorpay Test Key
         amount: orderAmount,
         currency: currency,
         name: "Bike Buddies",

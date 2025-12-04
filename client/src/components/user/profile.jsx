@@ -12,7 +12,7 @@ export default function Profile() {
     const userid = localStorage.getItem("id");
 
     axios
-      .get(`${API_BASE_URL}/user/profile`, { headers: { id: userid } })
+      .get(`${API_BASE_URL}/api/user/profile`, { headers: { id: userid } })
       .then((res) => {
         setUser(res.data.user);
         setRides(res.data.rides);

@@ -45,7 +45,7 @@ const LoginPage = () => {
 
             // Send OTP to the email
             try {
-                const res = await axios.post(`${API_BASE_URL}/user/login`, { email });
+                const res = await axios.post(`${API_BASE_URL}/api/user/login`, { email });
                 console.log(res.data);
                 if (res.data) {
                     setIsOtpSent(true);
@@ -67,7 +67,7 @@ const LoginPage = () => {
             }
 
             try {
-                const res = await axios.post(`${API_BASE_URL}/user/verify-otplogin`, { email, otp });
+                const res = await axios.post(`${API_BASE_URL}/api/user/verify-otplogin`, { email, otp });
                 if (res.data) {
                     console.log(res.data);
                     localStorage.setItem("id", res.data.user._id);

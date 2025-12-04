@@ -52,7 +52,7 @@ export default function ViewVehicles() {
     }
 
     axios
-      .get(`${API_BASE_URL}/rider/viewvehicle`, { headers: { "_id": userid } })
+      .get(`${API_BASE_URL}/api/rider/viewvehicle`, { headers: { "_id": userid } })
       .then((res) => {
         setVehicle(res.data);
         console.log(res.data);
@@ -70,7 +70,7 @@ export default function ViewVehicles() {
     const confirmed = window.confirm("Are you sure you want to delete this vehicle?");
     if (confirmed) {
       axios
-        .delete(`${API_BASE_URL}/rider/deleteVehicle/`,{headers:{id:vehicleId}})
+        .delete(`${API_BASE_URL}/api/rider/deleteVehicle/`,{headers:{id:vehicleId}})
         .then(() => {
           toast.success('vehicle Deleted Succesfully');
           // alert("Vehicle Deleted Successfully")
@@ -125,7 +125,7 @@ export default function ViewVehicles() {
     }
 
     axios
-      .put(`${API_BASE_URL}/rider/updatevehicle`, formData, {
+      .put(`${API_BASE_URL}/api/rider/updatevehicle`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           id:selectedVehicle._id
@@ -182,9 +182,10 @@ transition={Bounce}
                     {vehicle?.vehicleImage?.length > 0 && (
                       <CardMedia
                         component="img"
-                        height="180"
+                        height="140"
                         image={`${API_BASE_URL}/${vehicle.vehicleImage[0]}`}
                         alt="Vehicle Image"
+                        sx={{ objectFit: 'cover' }}
                       />
                     )}
                     <CardContent>
@@ -213,7 +214,7 @@ transition={Bounce}
                                 key={index}
                                 src={`${API_BASE_URL}/${img}`}
                                 alt="RC Book"
-                                style={{ width: "100%", borderRadius: 8, marginBottom: 10 }}
+                                style={{ width: "100%", maxWidth: "300px", borderRadius: 8, marginBottom: 10, display: "block", margin: "0 auto 10px" }}
                               />
                             ))
                           ) : (
@@ -231,7 +232,7 @@ transition={Bounce}
                             <img
                               src={`${API_BASE_URL}/${vehicle.insuranceImage[0]}`}
                               alt="Insurance"
-                              style={{ width: "100%", borderRadius: 8 }}
+                              style={{ width: "100%", maxWidth: "300px", borderRadius: 8, display: "block", margin: "0 auto" }}
                             />
                           ) : (
                             <Typography>No insurance image available</Typography>
@@ -248,7 +249,7 @@ transition={Bounce}
                             <img
                               src={`${API_BASE_URL}/${vehicle.licenseImage[0]}`}
                               alt="License"
-                              style={{ width: "100%", borderRadius: 8 }}
+                              style={{ width: "100%", maxWidth: "300px", borderRadius: 8, display: "block", margin: "0 auto" }}
                             />
                           ) : (
                             <Typography>No license image available</Typography>

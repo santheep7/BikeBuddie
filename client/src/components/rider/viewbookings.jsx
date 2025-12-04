@@ -21,7 +21,7 @@ export default function RiderViewBookings() {
   useEffect(() => {
     const userid = localStorage.getItem("id");
     axios
-      .get(`${API_BASE_URL}/rider/viewrides`, { headers: { _id: userid } })
+      .get(`${API_BASE_URL}/api/rider/viewrides`, { headers: { _id: userid } })
       .then((res) => setBooking(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -78,7 +78,7 @@ export default function RiderViewBookings() {
 
   const handleAction = (id, action) => {
     axios
-      .put(`${API_BASE_URL}/rider/updateStatus`, { status: action, id })
+      .put(`${API_BASE_URL}/api/rider/updateStatus`, { status: action, id })
       .then(() => {
         setBooking((prev) =>
           prev.map((ride) =>

@@ -28,7 +28,7 @@ const AdminDashboard = () => {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
-    Axios.get(`${API_BASE_URL}/admin/viewCount`)
+    Axios.get(`${API_BASE_URL}/api/admin/viewCount`)
       .then((res) => setCount({ ...count, ...res.data })) // ✅ Ensured safe merging
       .catch((err) => console.error("Error fetching count:", err));
   }, []);

@@ -24,7 +24,7 @@ export default function Viewreviews() {
 
 
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/admin/viewreviews`)
+    axios.get(`${API_BASE_URL}/api/admin/viewreviews`)
       .then((res) => {
         const reviewsData = res.data;
         setReviews(reviewsData);
@@ -54,7 +54,7 @@ export default function Viewreviews() {
 
   const handleReviewClick = (id) => {
     console.log(id)
-    axios.put(`${API_BASE_URL}/admin/review`,{},{headers:{id:id}})
+    axios.put(`${API_BASE_URL}/api/admin/review`,{},{headers:{id:id}})
     .then((res)=>{
       alert(res.data)
     }).catch((err)=>{

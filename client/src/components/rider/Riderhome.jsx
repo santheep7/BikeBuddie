@@ -11,7 +11,7 @@ export default function Riderhome() {
     if (!userId) return;
 
     axios
-      .get(`${API_BASE_URL}/rider/viewtravel`, { headers: { id: userId } })
+      .get(`${API_BASE_URL}/api/rider/viewtravel`, { headers: { id: userId } })
       .then((res) => {
         setRecord(res.data);
       })
