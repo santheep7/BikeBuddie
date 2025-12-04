@@ -276,7 +276,7 @@ const HomePage = () => {
               <Button sx={buttonHoverStyles} onClick={scrollToAbout}>About</Button>
               <Button sx={buttonHoverStyles} onClick={scrollToTestimonials}>Testimonials</Button>
               <Button sx={buttonHoverStyles} onClick={scrollToContact}>Contact</Button>
-              <Button sx={buttonHoverStyles} href="login">Login</Button>
+              <Button sx={buttonHoverStyles} href="/login">Login</Button>
             </Box>
           )}
         </Toolbar>
@@ -293,7 +293,7 @@ const HomePage = () => {
           <ListItem button onClick={(e) => { scrollToContact(e); handleDrawerToggle(); }}>
             <ListItemText primary="Contact" />
           </ListItem>
-          <ListItem button component="a" href="/Loginpage" onClick={handleDrawerToggle}>
+          <ListItem button component="a" href="/login" onClick={handleDrawerToggle}>
             <ListItemText primary="Login" />
           </ListItem>
         </List>
