@@ -195,11 +195,23 @@ const HomePage = () => {
     // Send contact data to backend
     axios.post(`${API_BASE_URL}/api/user/contact`, contact)
       .then((res) => {
-        alert(res.data);
+        alert(res.data || 'Message sent successfully!');
+        // Reset form after successful submission
+        setContact({
+          Name: '',
+          Email: '',
+          Message: '',
+        });
+        setErrors({
+          Name: '',
+          Email: '',
+          Message: '',
+        });
       })
       .catch((err) => {
-        console.error(err);
-        alert("There was an error submitting the form.");
+        console.error('Contact form error:', err);
+        console.error('Error response:', err.response?.data);
+        alert(err.response?.data?.message || "There was an error submitting the form. Please try again.");
       });
   };
 
