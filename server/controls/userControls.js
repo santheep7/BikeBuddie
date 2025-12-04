@@ -134,19 +134,28 @@ const verifyOTP = async (req, res) => {
 
 const verifyOTPLogin = async (req, res) => {
     const { email, otp } = req.body;
-    console.log(req.body);
+
     try {
-        // Find the user by email
-        const user = await userModel.findOne({email});
-        console.log(user)
-        if (user.otp !== otp) {
-            return res.status(400).json({ message: 'Invalid OTP.' });
+        const user = await userModel.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
-        res.status(200).json({ message: 'OTP verified successfully!' , user:user });
+
+        if (String(user.otp) !== String(otp)) {
+            return res.status(400).json({ message: "Invalid OTP" });
+        }
+
+        res.status(200).json({
+            message: "OTP verified successfully!",
+            user
+        });
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 // const loginUser = async (req, res) => {
 //     const { email, password } = req.body;
@@ -188,41 +197,42 @@ const sendOTPEmail1 = async (email, otp) => {
   };
   
   const loginUser = async (req, res) => {
-    const { email, otp, enteredOTP } = req.body; // Receiving email and OTP from request body
+    const { email, enteredOTP } = req.body;
     console.log(req.body);
-  
+
     try {
-      const existingUser = await userModel.findOne({ email });
-  
-      if (!existingUser) {
-        return res.status(404).json({ message: "User doesn't exist" });
-      }
+        const existingUser = await userModel.findOne({ email });
+
+        if (!existingUser) {
+            return res.status(404).json({ message: "User doesn't exist" });
+        }
   
       // Check if the OTP exists and if it matches the entered OTP
       if (enteredOTP) {
-        if (existingUser.otp === enteredOTP) {
-          // OTP matched, authenticate the user
-          res.status(200).json({ user: existingUser });
-        } else {
-          return res.status(400).json({ message: "Invalid OTP" });
+            if (String(existingUser.otp) === String(enteredOTP)) {
+                return res.status(200).json({
+                    message: "Login successful",
+                    user: existingUser
+                });
+            } else {
+                return res.status(400).json({ message: "Invalid OTP" });
+            }
         }
-      } else {
-        // If OTP is not provided, generate and send OTP
+
+        // 2️⃣ No OTP entered → send OTP
         const otp = generateOTP();
-        // Save the generated OTP to the user's document
         existingUser.otp = otp;
         await existingUser.save();
-  
-        // Send OTP to user's email
+
         await sendOTPEmail1(email, otp);
-        
+
         return res.status(200).json({ message: "OTP sent to email" });
-      }
+
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: error.message });
+        console.error("Login error:", error);
+        res.status(500).json({ message: "Server error during login" });
     }
-  };
+};
 
 const bookRide = async (req, res) => {
     try {
