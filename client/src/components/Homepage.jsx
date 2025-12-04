@@ -191,7 +191,7 @@ const HomePage = () => {
               <Button sx={buttonHoverStyles} href="#about">About</Button>
               <Button sx={buttonHoverStyles} href="#testimonials">Testimonials</Button>
               <Button sx={buttonHoverStyles} href="#contact">Contact</Button>
-              <Button sx={buttonHoverStyles} href="/login">Login</Button>
+              <Button sx={buttonHoverStyles} href="login">Login</Button>
             </Box>
           )}
         </Toolbar>
@@ -208,7 +208,7 @@ const HomePage = () => {
           <ListItem button component="a" href="#contact" onClick={handleDrawerToggle}>
             <ListItemText primary="Contact" />
           </ListItem>
-          <ListItem button component="a" href="/login" onClick={handleDrawerToggle}>
+          <ListItem button component="a" href="/Loginpage" onClick={handleDrawerToggle}>
             <ListItemText primary="Login" />
           </ListItem>
         </List>
